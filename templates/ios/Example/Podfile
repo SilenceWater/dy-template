@@ -1,16 +1,11 @@
-#/*   德一集团iOS工程示例模板   */
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/SilenceWater/Specs.git'
 
-use_frameworks!
-
-platform :ios, '8.0'
-
+platform :ios, '10.0'
 target '${POD_NAME}_Example' do
   pod '${POD_NAME}', :path => '../'
 
-
-  pod 'DYNetwork'
+    pod 'DYNetwork'
 
   target '${POD_NAME}_Tests' do
     inherit! :search_paths

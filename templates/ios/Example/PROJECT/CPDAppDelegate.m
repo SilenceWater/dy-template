@@ -7,12 +7,21 @@
 //
 
 #import "CPDAppDelegate.h"
+#import <DYNetwork/DYNetwork.h>
+#import "CPNetworkServiceObject.h"
+
+static NSString *const kServiceTypeDEV = @"com.dy.dev.service.identifier";
 
 @implementation CPDAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    CPNetworkServiceObject *object = [CPNetworkServiceObject new];
+    object.serviceType = DYNetworkServiceTypeDEV;
+    [[DYNetworkConfig sharedInstance] registerServiceObject:object serviceIdentifier:kServiceTypeDEV];
+    
     return YES;
 }
 

@@ -25,7 +25,8 @@ module Pod
 
     loop do
         
-        puts '--- 用户中心：UM，资源中心：RM，契约中心：CM，任务中心：TM，钱仓：MM，综合：OM，非业务组件：SA ---'.green
+        puts '----- 德一智慧城市 -----'.green
+        puts '---- iOS示例工程加载 ---'.green
         
         prefix = configurator.ask("What is your class prefix")
         

@@ -12,26 +12,79 @@ module Pod
       @prefixes = []
       @message_bank = MessageBank.new(self)
     end
-    
+
     def ask(question)
-        answer = ""
-        loop do
-            puts "\n#{question}?"
-            
-            @message_bank.show_prompt
-            answer = gets.chomp
-            
-            break if answer.length > 0
-            
-            print "\nYou need to provide an answer."
+      answer = ""
+      loop do
+        puts "\n#{question}?"
+
+        @message_bank.show_prompt
+        answer = gets.chomp
+
+        break if answer.length > 0
+
+        print "\nYou need to provide an answer."
+      end
+      answer
+    end
+
+    def ask_with_answers(question, possible_answers)
+
+      print "\n#{question}? ["
+
+      print_info = Proc.new {
+
+        possible_answers_string = possible_answers.each_with_index do |answer, i|
+           _answer = (i == 0) ? answer.underlined : answer
+           print " " + _answer
+           print(" /") if i != possible_answers.length-1
         end
-        answer
+        print " ]\n"
+      }
+      print_info.call
+
+      answer = ""
+
+      loop do
+        @message_bank.show_prompt
+        answer = gets.downcase.chomp
+
+        answer = "yes" if answer == "y"
+        answer = "no" if answer == "n"
+
+        # default to first answer
+        if answer == ""
+          answer = possible_answers[0].downcase
+          print answer.yellow
+        end
+
+        break if possible_answers.map { |a| a.downcase }.include? answer
+
+        print "\nPossible answers are ["
+        print_info.call
+      end
+
+      answer
     end
 
     def run
       @message_bank.welcome_message
 
-        ConfigureIOS.perform(configurator: self)
+      platform = self.ask_with_answers("What platform do you want to use?", ["iOS", "macOS"]).to_sym
+
+      case platform
+        when :macos
+          ConfigureMacOSSwift.perform(configurator: self)
+        when :ios
+          framework = self.ask_with_answers("What language do you want to use?", ["Swift", "ObjC"]).to_sym
+          case framework
+            when :swift
+              ConfigureSwift.perform(configurator: self)
+
+            when :objc
+              ConfigureIOS.perform(configurator: self)
+          end
+      end
 
       replace_variables_in_files
       clean_template_files
@@ -92,7 +145,7 @@ module Pod
       podfile = File.read podfile_path
       podfile_content = @pods_for_podfile.map do |pod|
         "pod '" + pod + "'"
-      end.join("\n  ")
+      end.join("\n    ")
       podfile.gsub!("${INCLUDED_PODS}", podfile_content)
       File.open(podfile_path, "w") { |file| file.puts podfile }
     end
@@ -110,9 +163,8 @@ module Pod
       File.open(prefix_path, "w") { |file| file.puts pch }
     end
 
-    def set_test_framework(test_type, extension)
+    def set_test_framework(test_type, extension, folder)
       content_path = "setup/test_examples/" + test_type + "." + extension
-      folder = extension == "m" ? "ios" : "swift"
       tests_path = "templates/" + folder + "/Example/Tests/Tests." + extension
       tests = File.read tests_path
       tests.gsub!("${TEST_EXAMPLE}", File.read(content_path) )
@@ -123,7 +175,6 @@ module Pod
       FileUtils.mv "POD_README.md", "README.md"
       FileUtils.mv "POD_LICENSE", "LICENSE"
       FileUtils.mv "NAME.podspec", "#{pod_name}.podspec"
-      FileUtils.mv "Pod/Assets/NAME.xcassets", "Pod/Assets/#{pod_name}.xcassets"
     end
 
     def rename_classes_folder

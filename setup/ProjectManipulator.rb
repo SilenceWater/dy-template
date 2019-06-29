@@ -41,7 +41,6 @@ module Pod
       project_metadata_item.new_file "../" + @configurator.pod_name  + ".podspec"
       project_metadata_item.new_file "../README.md"
       project_metadata_item.new_file "../LICENSE"
-#      project_metadata_item.new_file "../Pod/Assets/" + @configurator.pod_name  + ".xcassets"
     end
 
     def remove_demo_project
@@ -95,12 +94,10 @@ RUBY
 
       # rename xcproject
       File.rename(project_folder + "/PROJECT.xcodeproj", project_folder + "/" +  @configurator.pod_name + ".xcodeproj")
-      
-      File.rename(project_folder + "/PROJECT.entitlements", project_folder + "/" +  @configurator.pod_name + "-Example.entitlements")
 
       unless @remove_demo_target
         # change app file prefixes
-        ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m", "CPDApplicationProtcol.h", "CPDApplicationProtcol.m"].each do |file|
+        ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
 
@@ -109,7 +106,7 @@ RUBY
         end
 
         # rename project related files
-        ["PROJECT-Info.plist", "PROJECT-Prefix.pch"].each do |file|
+        ["PROJECT-Info.plist", "PROJECT-Prefix.pch", "PROJECT.entitlements"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
 

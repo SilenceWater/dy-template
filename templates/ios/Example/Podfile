@@ -1,9 +1,53 @@
-use_frameworks!
+source 'https://github.com/CocoaPods/Specs.git'
+source 'ssh://git@192.168.6.115:7999/xdwios/saspecs.git'
 
 platform :ios, '8.0'
-
 target '${POD_NAME}_Example' do
   pod '${POD_NAME}', :path => '../'
+  
+  #SAKit
+    pod 'SAKit'#, :git => 'ssh://git@192.168.6.115:7999/xdwios/sakit.git'
+  
+    #SANetwork
+    pod 'SANetwork'
+  
+    #SANetworkHUD
+    pod 'SANetworkHUD'
+  
+    #SAModuleService
+    pod 'SAModuleService'#, :git => 'ssh://git@192.168.6.115:7999/xdwios/samoduleservice.git'
+  
+    #IQKeyboardManager
+    pod 'IQKeyboardManager', '4.0.10'
+  
+    #JPush
+    pod 'JPush', '3.0.6'
+  
+    #YYModel
+    pod 'YYModel', '1.0.4'
+  
+    #SAFoundation
+    pod 'SAFoundation'
+  
+    #SASpecialRequest
+    pod 'SASpecialRequest'
+  
+    #SALocalizable
+    pod 'SALocalizable'
+  
+    #SAConfig
+    pod 'SAConfig'
+
+    #SALogin
+    pod 'SALogin'
+  
+    pod 'SAGlobal'
+
+    pod 'SAHome'
+
+    pod 'SAInfoCenter'
+
+    pod 'SATaskCenter'
 
   target '${POD_NAME}_Tests' do
     inherit! :search_paths

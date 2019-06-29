@@ -26,7 +26,7 @@ module Pod
     loop do
         
         puts '-------------- 德一智慧城市 --------------'.green
-        puts '------------ iOS示例工程加载 -----------'.green
+        puts '-----------> iOS示例工程加载 <----------'.green
         
         prefix = configurator.ask("What is your class prefix")
         
